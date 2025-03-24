@@ -34,8 +34,9 @@
 	<body>
 		<header>
 			<nav>
-				<a href="{% url 'all_blogs' %}">All Blogs</a>
-				<a href="{% url 'about' %}">About</a>
+				{% comment %} TODO: uncomment these {% endcomment %}
+				{% comment %} <a href="{% url 'all_blogs' %}">All Blogs</a>
+				<a href="{% url 'about' %}">About</a> {% endcomment %}
 			</nav>
 		</header>
 		<div class="content">{% block content %} {% endblock %}</div>

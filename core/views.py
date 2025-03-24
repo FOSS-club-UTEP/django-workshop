@@ -6,3 +6,7 @@ from .models import Blog
 def blog_detail(request, slug):
     blog = get_object_or_404(Blog, slug=slug)
     return render(request, "blog_detail.html", {"blog": blog})
+
+
+def landing_page(request):
+    return render(request, "landing.html")
