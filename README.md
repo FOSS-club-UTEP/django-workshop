@@ -283,4 +283,5 @@ urlpatterns = [
 ```html
 <a href="{% url 'all_posts' %}">All Posts</a>
 <a href="{% url 'landing' %}">Home</a>
+<a href="{% url 'new_post' %}">New Post</a>
 ```
