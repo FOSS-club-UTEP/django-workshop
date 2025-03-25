@@ -1,31 +1,31 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Blog
+from .models import BlogPost
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .forms import BlogForm
+from .forms import NewBlogpostForm
 
 
 def blogpost(request, slug):
-    blog = get_object_or_404(Blog, slug=slug)
-    return render(request, "blogpost.html", {"blog": blog})
+    post = get_object_or_404(BlogPost, slug=slug)
+    return render(request, "blogpost.html", {"post": post})
 
 
 def landing_page(request):
     return render(request, "landing.html")
 
 
-def new_blog(request):
+def new_post(request):
     if request.method == "POST":
-        form = BlogForm(request.POST)
+        form = NewBlogpostForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse("landing"))
     else:
         print("request was get...")
-        form = BlogForm()
+        form = NewBlogpostForm()
     return render(request, "newblog.html", {"form": form})
 
 
 def all_posts(request):
-    blogs = Blog.objects.all()
-    return render(request, "allposts.html", {"blogs": blogs})
+    posts = BlogPost.objects.all()
+    return render(request, "allposts.html", {"posts": posts})
