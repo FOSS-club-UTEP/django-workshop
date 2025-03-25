@@ -5,9 +5,9 @@ from django.urls import reverse
 from .forms import BlogForm
 
 
-def blog_detail(request, slug):
+def blogpost(request, slug):
     blog = get_object_or_404(Blog, slug=slug)
-    return render(request, "blog_detail.html", {"blog": blog})
+    return render(request, "blogpost.html", {"blog": blog})
 
 
 def landing_page(request):
@@ -24,3 +24,8 @@ def new_blog(request):
         print("request was get...")
         form = BlogForm()
     return render(request, "newblog.html", {"form": form})
+
+
+def all_posts(request):
+    blogs = Blog.objects.all()
+    return render(request, "allposts.html", {"blogs": blogs})

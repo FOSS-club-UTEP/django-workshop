@@ -1,0 +1,12 @@
+{% extends "base.html" %} {% block title %}All Blog Posts{% endblock %} {% block content %}
+<h1>All Blog Posts</h1>
+<ul>
+	{% for blog in blogs %}
+	<li onclick="location.href='{% url 'blogpost' blog.slug %}'" style="cursor: pointer">
+		<h2>{{ blog.title }}</h2>
+		<p>By {{ blog.author }} on {{ blog.created_at|date:"F j, Y" }}</p>
+		<p>{{ blog.content|truncatewords:30 }}</p>
+	</li>
+	{% endfor %}
+</ul>
+{% endblock %}
