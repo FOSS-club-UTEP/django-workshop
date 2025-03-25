@@ -81,6 +81,11 @@ urlpatterns = [
     path("", include("core.urls")),
 ]
 ```
+
+- see the result:
+  - `python manage.py runserver`
+  - in your browser: `localhost:8000`
+
 # new blog page
 - make the model
 ```python
