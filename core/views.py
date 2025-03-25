@@ -23,7 +23,7 @@ def new_post(request):
     else:
         print("request was get...")
         form = NewBlogpostForm()
-    return render(request, "newblog.html", {"form": form})
+    return render(request, "newpost.html", {"form": form})
 
 
 def all_posts(request):

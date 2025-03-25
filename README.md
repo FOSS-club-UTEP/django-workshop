@@ -50,7 +50,13 @@ INSTALLED_APPS = [
 
 ```html
 <!-- templates/landing.html -->
-{% extends "base.html" %} {% block title %} Landing Page {% endblock %} {% block content %}
+{% extends "base.html" %}
+
+{% block title %}
+    Landing Page
+{% endblock %} 
+
+{% block content %}
 <h1>Welcome to this Django Blog Tutorial!</h1>
 {% endblock %}
 ```
@@ -98,7 +104,7 @@ urlpatterns = [
 
 ```python
 # core/models.py
-class Blog(models.Model):
+class BlogPost(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True) # explain this
     content = models.TextField()
@@ -114,33 +120,41 @@ class Blog(models.Model):
 
 ```python
 from django import forms
-from .models import Blog
+from .models import BlogPost
 
 
-class BlogForm(forms.ModelForm):
+class NewBlogpostForm(forms.ModelForm):
     class Meta:
-        model = Blog
+        model = BlogPost
         fields = "__all__"
 ```
 
 - make the template: `newpost.html`
 
 ```html
-{% extends "base.html" %} {% block title %} New Blog Entry {% endblock %} {% block content %}
-<h1>Create a New Blog Entry</h1>
-<form method="POST">
-	{% csrf_token %} {% for field in form %}
-	<div>
-		{{ field.label_tag }} {{ field }}
-		<div style="color: red;">
-			{{ field.errors }}
-			<!-- This ensures errors are shown -->
-		</div>
-	</div>
-	{% endfor %}
+{% extends "base.html" %} 
 
-	<button type="submit">Submit</button>
-</form>
+{% block title %}
+    New Blog Entry
+{% endblock %} 
+
+{% block content %}
+    <h1>Create a New Blog Entry</h1>
+    <form method='POST'>
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div>
+            {{ field.label_tag }}
+            {{ field }}
+            <div style="color: red;">
+                {{ field.errors }}  <!-- This ensures errors are shown -->
+            </div>
+        </div>
+        {% endfor %}
+
+        <button type="submit">Submit</button>
+    </form>
 {% endblock %}
 ```
 
@@ -148,21 +162,22 @@ class BlogForm(forms.ModelForm):
 
 ```python
 # new imports!!
+from django.shortcuts import render, get_object_or_404
+from .models import BlogPost
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .forms import BlogForm
-from .models import Blog
+from .forms import NewBlogpostForm
 
 # new view
 def new_post(request):
     if request.method == "POST":
-        form = BlogForm(request.POST)
+        form = NewBlogpostForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse("landing"))
     else:
         print("request was get...")
-        form = BlogForm()
+        form = NewBlogpostForm()
     return render(request, "newpost.html", {"form": form})
 ```
 
@@ -187,13 +202,19 @@ urlpatterns = [
 
 ```html
 <!-- templates/blogpost.html -->
-{% extends 'base.html' %} {% block title %} {{ post.title }} {% endblock %} {% block content %}
-<article>
-	<h1>{{ post.title }}</h1>
-	<p><strong>Author:</strong> {{ post.author }}</p>
-	<p><strong>Published on:</strong> {{ post.created_at|date:"F j, Y" }}</p>
-	<div>{{ post.content|linebreaks }}</div>
-</article>
+{% extends 'base.html' %} 
+
+{% block title %}
+	{{ post.title }}
+{% endblock %} 
+
+{% block content %}
+	<article>
+		<h1>{{ post.title }}</h1>
+		<p><strong>Author:</strong> {{ post.author }}</p>
+		<p><strong>Published on:</strong> {{ post.created_at|date:"F j, Y" }}</p>
+		<div>{{ post.content|linebreaks }}</div>
+	</article>
 {% endblock %}
 ```
 
@@ -202,7 +223,7 @@ urlpatterns = [
 ```python
 # views.py
 def blogpost(request, slug):
-    post = get_object_or_404(Blog, slug=slug)
+    post = get_object_or_404(BlogPost, slug=slug)
     return render(request, "blogpost.html", {"post": post})
 ```
 
@@ -218,17 +239,23 @@ path("post/<slug:slug>/", views.blogpost, name="blogpost"),
 - template in `allposts.html`
 
 ```html
-{% extends "base.html" %} {% block title %} All Blog Posts {% endblock %} {% block content %}
-<h1>All Blog Posts</h1>
-<ul>
-	{% for post in posts %}
-	<li onclick="location.href='{% url 'blogpost' post.slug %}'" style="cursor: pointer">
-		<h2>{{ post.title }}</h2>
-		<p>By {{ post.author }} on {{ post.created_at|date:"F j, Y" }}</p>
-		<p>{{ post.content|truncatewords:30 }}</p>
-	</li>
-	{% endfor %}
-</ul>
+{% extends "base.html" %} 
+
+{% block title %}
+	All Blog Posts
+{% endblock %}
+
+{% block content %}
+	<h1>All Blog Posts</h1>
+	<ul>
+		{% for post in posts %}
+		<li onclick="location.href='{% url 'blogpost' post.slug %}'" style="cursor: pointer">
+			<h2>{{ post.title }}</h2>
+			<p>By {{ post.author }} on {{ post.created_at|date:"F j, Y" }}</p>
+			<p>{{ post.content|truncatewords:30 }}</p>
+		</li>
+		{% endfor %}
+	</ul>
 {% endblock %}
 ```
 
@@ -236,7 +263,7 @@ path("post/<slug:slug>/", views.blogpost, name="blogpost"),
 
 ```python
 def all_posts(request):
-    posts = Blog.objects.all()
+    posts = BlogPost.objects.all()
     return render(request, "allposts.html", {"posts": posts})
 ```
 
@@ -254,5 +281,6 @@ urlpatterns = [
 - add these under "nav" in the base template:
 
 ```html
-<a href="{% url 'all_posts' %}">All Posts</a> <a href="{% url 'landing' %}">Home</a>
+<a href="{% url 'all_posts' %}">All Posts</a>
+<a href="{% url 'landing' %}">Home</a>
 ```

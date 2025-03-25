@@ -1,12 +1,18 @@
-{% extends "base.html" %} {% block title %}All Blog Posts{% endblock %} {% block content %}
-<h1>All Blog Posts</h1>
-<ul>
-	{% for post in posts %}
-	<li onclick="location.href='{% url 'blogpost' post.slug %}'" style="cursor: pointer">
-		<h2>{{ post.title }}</h2>
-		<p>By {{ post.author }} on {{ post.created_at|date:"F j, Y" }}</p>
-		<p>{{ post.content|truncatewords:30 }}</p>
-	</li>
-	{% endfor %}
-</ul>
+{% extends "base.html" %} 
+
+{% block title %}
+	All Blog Posts
+{% endblock %}
+
+{% block content %}
+	<h1>All Blog Posts</h1>
+	<ul>
+		{% for post in posts %}
+		<li onclick="location.href='{% url 'blogpost' post.slug %}'" style="cursor: pointer">
+			<h2>{{ post.title }}</h2>
+			<p>By {{ post.author }} on {{ post.created_at|date:"F j, Y" }}</p>
+			<p>{{ post.content|truncatewords:30 }}</p>
+		</li>
+		{% endfor %}
+	</ul>
 {% endblock %}
