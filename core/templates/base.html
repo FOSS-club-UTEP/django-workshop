@@ -4,39 +4,14 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>{% block title %}My Site{% endblock %}</title>
-		<style>
-			body {
-				font-family: Arial, sans-serif;
-				margin: 0;
-				padding: 0;
-			}
-			header,
-			footer {
-				background-color: #f8f9fa;
-				padding: 20px;
-				text-align: center;
-			}
-			header a,
-			footer a {
-				margin: 0 15px;
-				text-decoration: none;
-				color: #007bff;
-			}
-			header a:hover,
-			footer a:hover {
-				text-decoration: underline;
-			}
-			.content {
-				padding: 20px;
-			}
-		</style>
 	</head>
 	<body>
 		<header>
 			<nav>
 				{% comment %} TODO: uncomment these {% endcomment %}
-				{% comment %} <a href="{% url 'all_blogs' %}">All Blogs</a>
-				<a href="{% url 'about' %}">About</a> {% endcomment %}
+				<a href="{% url 'all_posts' %}">All Posts</a>
+				<a href="{% url 'landing' %}">Home</a>
+				{% comment %} <a href="{% url 'about' %}">About</a>  {% endcomment %}
 			</nav>
 		</header>
 		<div class="content">{% block content %} {% endblock %}</div>
