@@ -5,6 +5,7 @@
 # .gitignore
 # django stuff
 *.sqlite3
+migrations/
 ```
 - `django-admin startproject django_tutorial .`
 ---
