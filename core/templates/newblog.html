@@ -1,0 +1,18 @@
+{% extends "base.html" %} {% block title %}New Blog Entry{% endblock %} {% block content %}
+<h1>Create a New Blog Entry</h1>
+<form method='POST'>
+    {% csrf_token %}
+
+	{% for field in form %}
+    <div>
+        {{ field.label_tag }}
+        {{ field }}
+        <div style="color: red;">
+            {{ field.errors }}  <!-- This ensures errors are shown -->
+        </div>
+    </div>
+    {% endfor %}
+
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}
